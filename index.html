@@ -134,7 +134,16 @@
                   required
                   onclick="this.showPicker()">
               </label>
-            <label class="field"><span>Preferred time <b>*</b></span><input name="time" type="time" required></label>
+            <!--<label class="field"><span>Preferred time <b>*</b></span><input name="time" type="time" required></label>-->
+            <label class="field">
+              <span>Preferred time <b>*</b></span>
+              <input
+                name="time"
+                type="text"
+                placeholder="Time between 7:00 AM and 6:00 PM"
+                required
+              >
+            </label>
             <label class="field field-full"><span>Location <b>*</b></span><input name="location" type="text" autocomplete="street-address" placeholder="Venue, Area or Full Address " required></label>
             <label class="field field-full"><span>Additional location details<b>*</b></span><textarea name="message" rows="3" placeholder="Paste your location as a Google Map link"></textarea></label>
           </div>
