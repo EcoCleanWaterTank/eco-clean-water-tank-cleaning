@@ -1,0 +1,15 @@
+/* Change these settings, then paste your deployed Apps Script /exec URL. */
+const BUSINESS_NAME = "Eco Clean Water Tank Cleaning";
+const CONTACT_EMAIL = "abhilashkp4016@gmail.com";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwENJmQU2MK-QBAhfVp3A_filYqRVGiaxlENJKeQ4kg8I976EfcrUdlDdVNQRZhMtlu8A/exec";
+
+document.querySelectorAll("[data-business]").forEach(n=>n.textContent=BUSINESS_NAME);
+document.title=`Book a Service | ${BUSINESS_NAME}`;
+const emailLink=document.getElementById("contactEmailLink"); emailLink.textContent=CONTACT_EMAIL; emailLink.href=`mailto:${CONTACT_EMAIL}`;
+document.getElementById("year").textContent=new Date().getFullYear();
+const cards=[...document.querySelectorAll(".service-card")]; const select=document.getElementById("serviceSelect");
+cards.forEach(card=>card.addEventListener("click",()=>{cards.forEach(c=>c.classList.remove("selected"));card.classList.add("selected");select.value=card.dataset.service;document.getElementById("booking").scrollIntoView({behavior:"smooth"});}));
+const form=document.getElementById("bookingForm"), button=document.getElementById("submitBooking"), status=document.getElementById("submitStatus");
+form.addEventListener("submit",async e=>{e.preventDefault();status.classList.remove("error");if(!GOOGLE_SCRIPT_URL){status.textContent="Email delivery is not connected yet. Follow SETUP.md and add the Apps Script Web App URL in script.js.";status.classList.add("error");return;}if(!form.reportValidity())return;const data=Object.fromEntries(new FormData(form).entries());data.business=BUSINESS_NAME;button.disabled=true;button.textContent="Sending request…";status.textContent="";try{await fetch(GOOGLE_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},body:new URLSearchParams(data).toString()});status.textContent="Your request has been sent. The business will contact you to confirm availability.";form.reset();cards.forEach(c=>c.classList.remove("selected"));}catch(err){status.textContent="Could not send the request. Please try again or contact us by email.";status.classList.add("error");}finally{button.disabled=false;button.innerHTML='Submit booking request <span aria-hidden="true">↗</span>';}});
+const menu=document.getElementById("menuToggle"),nav=document.querySelector(".desktop-nav");menu.addEventListener("click",()=>{const open=nav.classList.toggle("open");menu.setAttribute("aria-expanded",String(open));menu.textContent=open?"×":"☰";});nav.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{nav.classList.remove("open");menu.setAttribute("aria-expanded","false");menu.textContent="☰";}));
+const items=document.querySelectorAll(".reveal");if("IntersectionObserver" in window){const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");obs.unobserve(e.target);}}),{threshold:.12});items.forEach(i=>obs.observe(i));}else items.forEach(i=>i.classList.add("visible"));
